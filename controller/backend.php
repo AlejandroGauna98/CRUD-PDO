@@ -13,6 +13,14 @@ switch($datos['back']){
     case 'borrar':
         $res = $data->delete($datos['id']);
         break;
+    
+    case 'agregar':
+        $res = $data->guardar($datos);
+        break;
+
+    case 'modificar':
+        $res = $data->update($datos['id'], $datos['nombre']);
+        break;
 }
 
 echo json_encode($res);

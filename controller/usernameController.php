@@ -7,9 +7,9 @@
             $this->model = new usernameModel();
         }
 
-        public function guardar($nombre){
-            $id = $this->model->insertar($nombre);
-            return ($id != false) ? header("Location:show.php?id=".$id) :  header("Location:create.php");
+        public function guardar($datos){
+            $respuesta = $this->model->insertar($datos);
+            return $respuesta;
         }
 
         public function show($id){
@@ -21,7 +21,7 @@
         }
 
         public function update($id,$nombre){
-            return ($this->model->update($id,$nombre) != false) ? header("Location:show.php?id=".$id) : header("Location:index.php");
+            return ($this->model->update($id,$nombre) != false) ? true : false;
         }
         
         public function delete($id){

@@ -12,10 +12,29 @@
             }
         }
 
-        public function insertar($nombre){
-            $stament = $this->PDO->prepare("INSERT INTO username VALUES(null,:nombre,1)");
-            $stament->bindParam(":nombre",$nombre);
-            return($stament->execute()) ? $this->PDO->lastInsertId() : false;
+        public function insertar($datos){
+            $pass = md5($datos['password']); 
+            try{
+            $stament = $this->PDO->prepare("INSERT INTO username VALUES(null,:nombre,1,:usuario,:pass,:rol)");
+            $stament->bindParam(":nombre",$datos['nombre']);
+            $stament->bindParam(":usuario",$datos['usuario']);
+            $stament->bindParam(":pass",$pass);
+            $stament->bindParam(":rol",$datos['rol']);
+            return $stament->execute();
+           /* if($stament->execute()){
+                return true;
+            }else{
+                
+                if($stament->errorInfo()[1] == 1062){
+                    return "error solucionado";
+                }
+                return false;
+            }*/
+            }catch(PDOException $e){
+                
+                return false;
+            }
+           
         }
 
         public function show($id){
@@ -48,7 +67,7 @@
         }*/
 
         public function delete($id){
-            $stament = $this->PDO->prepare("UPDATE username SET estado = 0 WHERE id = :id");
+            $stament = $this->PDO->prepare("UPDATE username SET estado = CASE WHEN estado = 1 THEN 0 ELSE 1 END WHERE id = :id");
             $stament->bindParam(":id",$id);
             return($stament->execute()) ? true : false;
         }
